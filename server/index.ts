@@ -6,7 +6,7 @@ import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import { Prisma, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 const app = express();
 const prisma = new PrismaClient();
@@ -104,19 +104,14 @@ app.get("/api/dashboard", authenticate, async (req, res) => {
     take: 5
   });
 
-  const typedServices = services as Prisma.ServiceGetPayload<{
-    include: { product: true };
-  }>[];
-  const typedInvoices = invoices as Prisma.InvoiceGetPayload<{}>[];
-
   res.json({
-    services: typedServices.map((service) => ({
+    services: services.map((service) => ({
       id: service.id,
       name: service.product?.name || "Service",
       status: service.status,
       renewsAt: service.renewsAt?.toISOString() || new Date().toISOString()
     })),
-    invoices: typedInvoices.map((invoice) => ({
+    invoices: invoices.map((invoice) => ({
       id: invoice.id,
       amount: Number(invoice.amount),
       status: invoice.status
