@@ -1,51 +1,42 @@
-﻿# Hostnay
+﻿# Hostnay (Static Site)
 
-Premium hosting SaaS platform for VPS, game servers, and web hosting.
+This is a pure static HTML/CSS site for Hostnay. No backend, no database, no authentication.
 
-## Features
-- Modern marketing website
-- Client dashboard
-- Admin management panel
-- Product, billing, coupons, gift cards, orders, maintenance
-- Secure JWT authentication
-- OxaPay payment integration
+## Structure
+- `index.html` - main site
+- `assets/css/styles.css` - styles
+- `assets/js/app.js` - animations + maintenance toggles
+- `assets/images/` - logos and team photos
 
-## Tech Stack
-- Frontend: Next.js, TailwindCSS, Framer Motion
-- Backend: Node.js, Express
-- Database: PostgreSQL + Prisma
-
-## Getting Started
-1. Install dependencies
+## Update Logo
+Replace the file:
 ```
-npm install
+assets/images/logo.svg
 ```
 
-2. Configure environment
-Copy `.env.example` to `.env` and fill in values.
-
-3. Setup database
+## Update Team Members
+Edit the Team section in `index.html`:
 ```
-npm run prisma:generate
-npm run prisma:migrate
-npm run db:seed
+<img class="team-avatar" src="assets/images/team-1.jpg" alt="Team member" />
+<h3>Rana Al-Farsi</h3>
+<p>Head of Infrastructure</p>
 ```
-
-4. Run dev servers
+Add/remove cards and update the image filenames. Put your images in:
 ```
-npm run dev
+assets/images/
 ```
 
-Web app: http://localhost:3000
-API: http://localhost:4000
+## Maintenance Toggle
+Edit `assets/js/app.js`:
+```
+const maintenanceConfig = {
+  vps: false,
+  games: false,
+  web: false,
+  message: "Service temporarily unavailable"
+};
+```
+Set any service to `true` to show maintenance state.
 
-## Scripts
-- `npm run dev` - Start frontend + backend
-- `npm run prisma:generate` - Generate Prisma client
-- `npm run prisma:migrate` - Run migrations
-- `npm run db:seed` - Seed database
-- `npm run prisma:studio` - Open Prisma Studio
-
-## Repo Notes
-- Use the admin panel to create products and categories
-- For OxaPay, set `OXAPAY_API_URL` and `OXAPAY_MERCHANT_KEY`
+## Run locally
+Open `index.html` in a browser.
