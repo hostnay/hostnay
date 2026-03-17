@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 
 const navLinks = [
   { href: "/services/vps", label: "VPS Hosting" },
