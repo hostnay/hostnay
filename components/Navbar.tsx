@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { clearToken, getToken } from "../lib/auth";
 
 const navLinks = [
+  { href: "/", label: "Home" },
   { href: "/services/vps", label: "VPS Hosting" },
   { href: "/services/games", label: "Game Servers" },
   { href: "/services/web-hosting", label: "Web Hosting" },
@@ -46,12 +47,20 @@ export default function Navbar() {
               Sign Out
             </button>
           ) : (
-            <Link
-              href="/auth/login"
-              className="rounded-full border border-white/20 px-4 py-2 text-xs font-semibold text-white/80 transition hover:border-white/60 hover:text-white"
-            >
-              Sign In
-            </Link>
+            <>
+              <Link
+                href="/auth/login"
+                className="rounded-full border border-white/20 px-4 py-2 text-xs font-semibold text-white/80 transition hover:border-white/60 hover:text-white"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/auth/register"
+                className="rounded-full border border-white/20 px-4 py-2 text-xs font-semibold text-white/80 transition hover:border-white/60 hover:text-white"
+              >
+                Register
+              </Link>
+            </>
           )}
           <Link
             href={hasToken ? "/dashboard" : "/auth/register"}

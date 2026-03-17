@@ -6,6 +6,7 @@ import Navbar from "../../../components/Navbar";
 import Footer from "../../../components/Footer";
 import { login } from "../../../lib/api";
 import { setToken } from "../../../lib/auth";
+import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -70,6 +71,12 @@ export default function LoginPage() {
               {loading ? "Signing in..." : "Sign In"}
             </button>
           </form>
+          <p className="mt-4 text-xs text-slate-400">
+            Don’t have an account?{" "}
+            <Link href="/auth/register" className="text-accent hover:text-sky-300">
+              Register
+            </Link>
+          </p>
         </div>
       </main>
       <Footer />
