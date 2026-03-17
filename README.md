@@ -47,5 +47,5 @@ API: http://localhost:4000
 - `npm run prisma:studio` - Open Prisma Studio
 
 ## Repo Notes
-- Demo credentials are seeded for local development
+- Use the admin panel to create products and categories
 - For OxaPay, set `OXAPAY_API_URL` and `OXAPAY_MERCHANT_KEY`

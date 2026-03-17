@@ -39,6 +39,7 @@ CREATE TABLE services (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES users(id),
   product_id UUID REFERENCES products(id),
+  order_id UUID REFERENCES orders(id),
   status VARCHAR(32) DEFAULT 'active',
   region VARCHAR(80),
   metadata JSONB,

@@ -55,6 +55,8 @@ model Service {
   user      User?    @relation(fields: [userId], references: [id])
   productId String?
   product   Product? @relation(fields: [productId], references: [id])
+  orderId   String?
+  order     Order?   @relation(fields: [orderId], references: [id])
   status    String   @default("active") @db.VarChar(32)
   region    String?  @db.VarChar(80)
   metadata  Json?

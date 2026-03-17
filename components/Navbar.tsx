@@ -1,4 +1,8 @@
+﻿"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { clearToken, getToken } from "../lib/auth";
 
 const navLinks = [
   { href: "/services/vps", label: "VPS Hosting" },
@@ -9,6 +13,17 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+  const [hasToken, setHasToken] = useState(false);
+
+  useEffect(() => {
+    setHasToken(Boolean(getToken()));
+  }, []);
+
+  const handleLogout = () => {
+    clearToken();
+    setHasToken(false);
+  };
+
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-secondary/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
@@ -23,17 +38,26 @@ export default function Navbar() {
           ))}
         </nav>
         <div className="flex items-center gap-3">
+          {hasToken ? (
+            <button
+              onClick={handleLogout}
+              className="rounded-full border border-white/20 px-4 py-2 text-xs font-semibold text-white/80 transition hover:border-white/60 hover:text-white"
+            >
+              Sign Out
+            </button>
+          ) : (
+            <Link
+              href="/auth/login"
+              className="rounded-full border border-white/20 px-4 py-2 text-xs font-semibold text-white/80 transition hover:border-white/60 hover:text-white"
+            >
+              Sign In
+            </Link>
+          )}
           <Link
-            href="/dashboard"
-            className="rounded-full border border-white/20 px-4 py-2 text-xs font-semibold text-white/80 transition hover:border-white/60 hover:text-white"
-          >
-            Sign In
-          </Link>
-          <Link
-            href="/dashboard"
+            href={hasToken ? "/dashboard" : "/auth/register"}
             className="glow-button rounded-full bg-accent px-4 py-2 text-xs font-semibold text-white transition hover:scale-105"
           >
-            Get Started
+            {hasToken ? "Dashboard" : "Get Started"}
           </Link>
         </div>
       </div>
