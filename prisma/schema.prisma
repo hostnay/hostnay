@@ -1,0 +1,137 @@
+﻿// Prisma schema for Hostnay
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique @db.VarChar(255)
+  passwordHash String
+  name         String?   @db.VarChar(120)
+  status       String    @default("active") @db.VarChar(24)
+  createdAt    DateTime  @default(now())
+  services     Service[]
+  orders       Order[]
+  tickets      Ticket[]
+  giftCards    GiftCard[]
+}
+
+model AdminUser {
+  id           String   @id @default(uuid())
+  email        String   @unique @db.VarChar(255)
+  passwordHash String
+  role         String   @default("admin") @db.VarChar(40)
+  createdAt    DateTime @default(now())
+}
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String    @unique @db.VarChar(120)
+  createdAt DateTime  @default(now())
+  products  Product[]
+}
+
+model Product {
+  id           String   @id @default(uuid())
+  categoryId   String?
+  category     Category? @relation(fields: [categoryId], references: [id])
+  name         String   @db.VarChar(120)
+  description  String?
+  priceMonthly Decimal
+  enabled      Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  services     Service[]
+}
+
+model Service {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id])
+  status    String   @default("active") @db.VarChar(32)
+  region    String?  @db.VarChar(80)
+  metadata  Json?
+  createdAt DateTime @default(now())
+  renewsAt  DateTime?
+
+  @@index([userId])
+}
+
+model Order {
+  id          String    @id @default(uuid())
+  userId      String?
+  user        User?     @relation(fields: [userId], references: [id])
+  status      String    @default("pending") @db.VarChar(32)
+  totalAmount Decimal
+  createdAt   DateTime  @default(now())
+  invoices    Invoice[]
+
+  @@index([userId])
+}
+
+model Invoice {
+  id       String   @id @default(uuid())
+  orderId  String?
+  order    Order?   @relation(fields: [orderId], references: [id])
+  status   String   @default("due") @db.VarChar(32)
+  amount   Decimal
+  issuedAt DateTime @default(now())
+  dueAt    DateTime?
+  payments Payment[]
+
+  @@index([orderId])
+}
+
+model Payment {
+  id             String   @id @default(uuid())
+  invoiceId      String?
+  invoice        Invoice? @relation(fields: [invoiceId], references: [id])
+  provider       String   @db.VarChar(40)
+  amount         Decimal
+  status         String   @default("pending") @db.VarChar(32)
+  transactionRef String?  @db.VarChar(120)
+  createdAt      DateTime @default(now())
+
+  @@index([invoiceId])
+}
+
+model Coupon {
+  id              String   @id @default(uuid())
+  code            String   @unique @db.VarChar(40)
+  discountPercent Int
+  expiresAt       DateTime?
+  maxUses         Int?
+  uses            Int      @default(0)
+  createdAt       DateTime @default(now())
+}
+
+model GiftCard {
+  id         String   @id @default(uuid())
+  code       String   @unique @db.VarChar(40)
+  value      Decimal
+  balance    Decimal
+  redeemedBy String?
+  redeemedAt DateTime?
+  createdAt  DateTime @default(now())
+  user       User?    @relation(fields: [redeemedBy], references: [id])
+}
+
+model Ticket {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  subject   String   @db.VarChar(160)
+  status    String   @default("open") @db.VarChar(32)
+  priority  String   @default("normal") @db.VarChar(20)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@index([userId])
+}
